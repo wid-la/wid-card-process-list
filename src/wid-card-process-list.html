@@ -34,6 +34,39 @@ Example:
       paper-material {
         overflow-y: auto;
         height: 100%;
+        background-color: #fff;
+      }
+
+      #header {
+        background-color: #435862;
+        max-height: 48px;
+      }
+
+      #header iron-icon {
+        margin-top: 8px;
+        height: 30px;
+      }
+
+      #content {
+        background-color: #546e7a;
+        color: #fff;
+      }
+
+      .odd {
+        background-color: #657d88;
+      }
+
+      .process-pid  {
+        text-align: center;
+      }
+      .process-name {
+        text-align: left;
+      }
+      .process-cpu  {
+        text-align: center;
+      }
+      .process-mem  {
+        text-align: center;
       }
 
     </style>
@@ -48,6 +81,22 @@ Example:
     </div>    
 
     <paper-material class="layout vertical flex" elevation="3">
+      <div id="header" class="flex layout horizontal">
+        <iron-icon src="pid.svg" class="flex"></iron-icon>
+        <iron-icon src="name.svg" class="flex-3"></iron-icon>
+        <iron-icon src="cpu.svg" class="flex"></iron-icon>
+        <iron-icon src="ram.svg" class="flex"></iron-icon>
+      </div>
+      <div id="content" class="flex-8 layout vertical flex">
+        <template is="dom-repeat" items="[[processes]]" as="process">
+          <div class$="{{_rowClass(index)}}">
+            <div class="process-pid flex">[[process.pid]]</div>
+            <div class="process-name flex-3">[[process.name]]</div>
+            <div class="process-cpu flex">[[process.cpu]]</div>
+            <div class="process-mem flex">[[process.mem]]</div>
+          </div>
+        </template> 
+      </div>
     </paper-material>
 
   </template>
@@ -62,9 +111,25 @@ Example:
 
       is: 'wid-card-process-list',
 
+      behaviors: [Polymer.WidCardStandardBehavior, Polymer.WidCardWeightBehavior, Polymer.WidCardSubscriptionsBehavior],
+
       properties: {
+        /**
+         * processes
+         * @type {Object}
+         */
+        processes: {
+          type: Object
+        }
 
-
+      },
+        
+      _rowClass: function(index) {
+        var odd = '';
+        if (index % 2 === 0) {
+          odd = 'odd';
+        }
+        return odd + ' flex layout horizontal center-center';
       }
 
     });
